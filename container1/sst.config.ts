@@ -1,6 +1,5 @@
 import type { SSTConfig } from "sst";
 import { SvelteKitSite, Cognito, Function, Api } from "sst/constructs";
-import { Role } from "aws-cdk-lib/aws-iam";
 
 export default {
   config(_input) {
@@ -22,13 +21,12 @@ export default {
         }
       });
 
-      const role = Role.fromRoleName(stack, "ImportedRole", "reads3record-role-3k3s1a9p");
       const lfunc2 = new Function(stack, "Function2", {
         handler: "packages/functions/src/python",
         url: true,
-        role,
         runtime: "container",
         architecture: "arm_64",
+        permissions: ["s3:GetObject"],
         container: {
           cmd: ["mylambda.handler2"]
         }
