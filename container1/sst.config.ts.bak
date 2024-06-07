@@ -1,0 +1,46 @@
+import { SSTConfig } from "sst";
+import { API } from "./stacks/MyStack";
+import { Role } from "aws-cdk-lib/aws-iam";
+
+export default {
+  config(_input) {
+    return {
+      name: "container1",
+      region: "us-west-2",
+    };
+  },
+  stacks(app) {
+
+    app.stack(function Site({ stack }) {
+
+      const lfunc1 = new Function(stack, "Function", {
+        handler: "src/functions/python",
+        runtime: "container",
+        architecture: "arm_64",
+        url: true,
+        container: {
+          cmd: ["mylambda.handler1"]
+        }
+      });
+
+      const role = Role.fromRoleName(stack, "ImportedRole", "reads3record-role-3k3s1a9p");
+      const lfunc2 = new Function(stack, "Function", {
+        handler: "src/functions/python",
+        runtime: "container",
+        architecture: "arm_64",
+        url: true,
+        role,
+        container: {
+          cmd: ["mylambda.handler2"]
+        }
+      });
+
+      stack.addOutputs({
+        lfunc1: lfunc1.url,
+        lfunc2: lfunc2.url,
+      });
+
+    });
+
+  }
+} satisfies SSTConfig;
