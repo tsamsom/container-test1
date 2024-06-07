@@ -15,6 +15,7 @@ export default {
         handler: "packages/functions/src/python",
         url: true,
         runtime: "container",
+        architecture: "arm_64",
       });
 
       stack.addOutputs({
