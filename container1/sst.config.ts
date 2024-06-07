@@ -11,14 +11,10 @@ export default {
   stacks(app) {
     app.stack(function Site({ stack }) {
 
-      let dbKey = "Database Key";
       const lfunc = new Function(stack, "Function", {
-        handler: "packages/functions/src/python/mylambda1.handler",
+        handler: "packages/functions/src/python",
         url: true,
         runtime: "container",
-        environment: {
-          DB_KEY: dbKey,
-        },
       });
 
       stack.addOutputs({
