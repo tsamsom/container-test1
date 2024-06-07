@@ -11,8 +11,8 @@ def handler1(event, context):
 
 def handler2(event, context):
     response = s3.get_object(Bucket='silx-testbucket1', Key='key1')
-    content = response(['Body'].read().decode('utf-8'))
+    content = response['Body'].read().decode('utf-8')
     return {
         'statusCode': 200,
-        'body': json.dumps('Hello from Lambda2!  ')
+        'body': json.dumps(content)
     }
